@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Amigo 💙</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="index-bg">
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="index.html">Início</a>
+    <a href="galeria.html">Galeria</a>
+    <a href="jogos.html">Jogos</a>
+    <a href="mensagens.html">Mensagens</a>
+</nav>
+
+<!-- INTRO + INPUT NOME -->
+<div class="intro-container" id="intro-container">
+    <h1>Hora do Quiz! 🎮</h1>
+    <p id="intro-text">Oblá, vê la se introduzes o teu nome, e direito de preferência.</p>
+
+    <div class="nome-container">
+        <input type="text" id="nome" placeholder="Digite seu nome..." />
+        <button id="comecar">Começar</button>
+    </div>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-container" id="quiz-container" style="display:none;">
+    <h2 id="pergunta"></h2>
+    <div id="respostas" class="respostas-container"></div>
+</div>
+
+<script>
+const quizData = [
+    {
+        nomes: ["Maria Jesus", "Maria Silva", "Maria"], 
+        perguntas: [
+            { pergunta: "Quando nos conhecemos?", respostas: ["Anos da Leonor", "Na festa da Lara", "Na rua"], correta: 0 },
+            { pergunta: "Quando faço anos", respostas: ["15 Abril", "11 Março", "11 Abril"], correta: 2 }
+        ]
+    },
+    {
+        nomes: ["Selix, selix, SELIX, vitor, vitor alves, VITOR ALVES, Vitor Alves"], 
+        perguntas: [
+            { pergunta: "Qual é aquela coisa que, olhamos os dois e dizemos logo - que nojo?", respostas: ["Rúben", "Gays", "O rúben"], correta: 1 },
+            { pergunta: "Em que ano nos conhecemos?", respostas: ["2013", "2015", "2016"], correta: 1 }
+        ]
+    },
+    {
+        nomes: ["Leonor, Leonor Jesus, Nono, Nônô"], 
+        perguntas: [
+            { pergunta: "Onde nos conhecemos?", respostas: ["Escola", "Saimos em grupo e conhecemo-nos no norte", "No Marshopping"], correta: 0 },
+            { pergunta: "Qual preferes?", respostas: ["Delena", "Stelena", "O teu maravilhoso namorado"], correta: 2 }
+        ]
+    },
+    {
+        nomes: ["Ruben, RUBEN, ruben, RÚBEN, Rúben, rúben"], 
+        perguntas: [
+            { pergunta: "Quantos anos somos amigos?", respostas: ["Não somos", "14 anos", "15 anos", "13 anos"], correta: 2 },
+            { pergunta: "Em que ano (letivo) entraste na minha turma", respostas: ["2º ano", "3º ano", "1º ano"], correta: 0 }
+        ]
+    },
+    {
+        nomes: ["Castro, rafael, rafael castro, CASTRO, Rafael Castro"], 
+        perguntas: [
+            { pergunta: "Como nos conhecemos?", respostas: ["No fortnite", "Entraste num grupo comigo e com o selix", "Na escola"], correta: 0 },
+            { pergunta: "Qual preferes?", respostas: ["PD 130", "6K", "O Rúben"], correta: 2 }
+        ]
+    }
+];
+
+// =========================================
+// Lógica do quiz
+// =========================================
+let currentPergunta = 0;
+let perguntas = [];
+
+const nomeInput = document.getElementById('nome');
+const comecarBtn = document.getElementById('comecar');
+const introContainer = document.getElementById('intro-container');
+const quizContainer = document.getElementById('quiz-container');
+const perguntaEl = document.getElementById('pergunta');
+const respostasEl = document.getElementById('respostas');
+
+comecarBtn.addEventListener('click', () => {
+    const nomeDigitado = nomeInput.value.trim();
+    let encontrado = false;
+
+    // Verifica todos os arrays de nomes equivalentes
+    for(let i=0; i<quizData.length; i++){
+        if(quizData[i].nomes.includes(nomeDigitado)){
+            perguntas = quizData[i].perguntas;
+            encontrado = true;
+            break;
+        }
+    }
+
+    if(encontrado){
+        currentPergunta = 0;
+        // esconde intro e input
+        introContainer.style.display = 'none';
+        // mostra quiz
+        quizContainer.style.display = 'flex';
+        mostrarPergunta();
+    } else {
+        alert("Nome não encontrado! Verifica se digitaste corretamente.");
+    }
+});
+
+function mostrarPergunta(){
+    const atual = perguntas[currentPergunta];
+    perguntaEl.textContent = atual.pergunta;
+    respostasEl.innerHTML = '';
+
+    atual.respostas.forEach((res, index) => {
+        const btn = document.createElement('button');
+        btn.textContent = res;
+        btn.classList.add('resposta');
+        btn.addEventListener('click', () => {
+            // mostra resposta correta
+            const botoes = respostasEl.querySelectorAll('button');
+            botoes.forEach((b, i) => {
+                if(i === atual.correta){
+                    b.style.backgroundColor = "#4CAF50"; // verde = correta
+                } else {
+                    b.style.backgroundColor = "#f44336"; // vermelho = incorreta
+                }
+                b.disabled = true;
+            });
+
+            // passa para próxima pergunta
+            setTimeout(() => {
+                currentPergunta++;
+                if(currentPergunta < perguntas.length){
+                    mostrarPergunta();
+                } else {
+                    alert(`🎉 Fim do quiz para ${nomeDigitado}!`);
+                    location.reload();
+                }
+            }, 1200);
+        });
+        respostasEl.appendChild(btn);
+    });
+}
+</script>

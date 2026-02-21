@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Galeria 💙</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="galeria-bg">
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="index.html">Início</a>
+    <a href="galeria.html">Galeria</a>
+    <a href="jogos.html">Jogos</a>
+    <a href="mensagens.html">Mensagens</a>
+</nav>
+
+<!-- TÍTULO -->
+<header class="galeria-header">
+    <h1>Galeria de Memórias 💙</h1>
+    <p>Clique nas fotos para ver em destaque e ler a legenda!</p>
+</header>
+
+<!-- MINI GALERIA -->
+<section class="mini-galeria">
+    <img src="fotos/foto3.jpeg" alt="Foto 1" class="foto-lightbox" data-legenda="Risos e alegria 1">
+    <img src="fotos/foto4.jpeg" alt="Foto 2" class="foto-lightbox" data-legenda="Viagem inesquecível 2">
+    <img src="fotos/foto5.jpeg" alt="Foto 3" class="foto-lightbox" data-legenda="Memória feliz 3">
+    <img src="fotos/foto6.jpeg" alt="Foto 4" class="foto-lightbox" data-legenda="Diversão total 4">
+    <img src="fotos/foto7.jpeg" alt="Foto 5" class="foto-lightbox" data-legenda="Momentos especiais 5">
+    <img src="fotos/foto8.jpeg" alt="Foto 6" class="foto-lightbox" data-legenda="Viagem incrível 6">
+    <img src="fotos/foto9.jpeg" alt="Foto 7" class="foto-lightbox" data-legenda="Risos eternos 7">
+    <img src="fotos/foto10.jpeg" alt="Foto 8" class="foto-lightbox" data-legenda="Aventuras 8">
+    <img src="fotos/foto11.png" alt="Foto 9" class="foto-lightbox" data-legenda="Momentos felizes 9">
+    <img src="fotos/foto12.jpeg" alt="Foto 10" class="foto-lightbox" data-legenda="Diversão total 10">
+    <img src="fotos/foto13.jpeg" alt="Foto 11" class="foto-lightbox" data-legenda="Memórias fofas 11">
+    <img src="fotos/foto14.jpeg" alt="Foto 12" class="foto-lightbox" data-legenda="Risos sem fim 12">
+</section>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox">
+    <span class="fechar">&times;</span>
+    <img class="lightbox-img" src="" alt="">
+    <p class="legenda"></p>
+    <a class="proximo">&#10095;</a>
+    <a class="anterior">&#10094;</a>
+</div>
+
+<script>
+const fotos = document.querySelectorAll('.foto-lightbox');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.querySelector('.lightbox-img');
+const legenda = document.querySelector('.legenda');
+const fechar = document.querySelector('.fechar');
+const proximo = document.querySelector('.proximo');
+const anterior = document.querySelector('.anterior');
+
+let currentIndex = 0;
+
+fotos.forEach((foto, index) => {
+    foto.addEventListener('click', () => {
+        currentIndex = index;
+        openLightbox();
+    });
+});
+
+function openLightbox() {
+    lightbox.style.display = 'flex';
+    updateLightbox();
+}
+
+function closeLightbox() {
+    lightbox.style.display = 'none';
+}
+
+function updateLightbox() {
+    lightboxImg.src = fotos[currentIndex].src;
+    legenda.textContent = fotos[currentIndex].dataset.legenda;
+}
+
+function nextPhoto() {
+    currentIndex = (currentIndex + 1) % fotos.length;
+    updateLightbox();
+}
+
+function prevPhoto() {
+    currentIndex = (currentIndex - 1 + fotos.length) % fotos.length;
+    updateLightbox();
+}
+
+fechar.addEventListener('click', closeLightbox);
+proximo.addEventListener('click', nextPhoto);
+anterior.addEventListener('click', prevPhoto);
+
+lightbox.addEventListener('click', (e) => {
+    if(e.target === lightbox) closeLightbox();
+});
+</script>
+
+</body>
+</html>
